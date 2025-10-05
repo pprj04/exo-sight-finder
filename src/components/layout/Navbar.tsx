@@ -26,7 +26,7 @@ const Navbar = () => {
             <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
               <Telescope className="h-6 w-6 text-primary" />
             </div>
-            <span className="text-xl font-bold gradient-text">ExoHunter</span>
+            <span className="text-xl font-bold gradient-text">ExoSight Finder</span>
           </Link>
 
           {/* Desktop Navigation */}

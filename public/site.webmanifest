@@ -1,0 +1,22 @@
+{
+  "name": "ExoSight Finder",
+  "short_name": "ExoSight",
+  "description": "AI-Powered Exoplanet Detection System",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f1729",
+  "theme_color": "#00d4ff",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}

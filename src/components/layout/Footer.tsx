@@ -8,7 +8,7 @@ const Footer = () => {
           <div className="flex items-center gap-2">
             <Rocket className="h-5 w-5 text-primary" />
             <p className="text-sm text-muted-foreground">
-              NASA Space Apps Challenge 2025
+              AI-Powered Exoplanet Detection
             </p>
           </div>
           
@@ -25,7 +25,7 @@ const Footer = () => {
           </div>
           
           <p className="text-sm text-muted-foreground">
-            © 2025 ExoHunter. All rights reserved.
+            © 2025 ExoSight Finder. All rights reserved.
           </p>
         </div>
       </div>
