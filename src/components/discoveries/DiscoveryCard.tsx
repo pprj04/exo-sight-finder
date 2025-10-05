@@ -1,8 +1,12 @@
+import { useState, Suspense, lazy } from "react";
 import { Clock, Globe, TrendingDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { LineChart, Line, ResponsiveContainer } from "recharts";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const Exoplanet3DViewer = lazy(() => import("@/components/Exoplanet3DViewer"));
 
 interface DiscoveryCardProps {
   id: string;
@@ -28,10 +32,21 @@ const DiscoveryCard = ({
   onClick,
   delay,
 }: DiscoveryCardProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
   const getConfidenceColor = (conf: number) => {
     if (conf >= 80) return "bg-green-500/20 text-green-400 border-green-500/30";
     if (conf >= 60) return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
     return "bg-red-500/20 text-red-400 border-red-500/30";
+  };
+
+  const exoplanetData = {
+    name: koiId,
+    orbitalPeriod,
+    planetRadius,
+    distance: 1.2,
+    type: confidence >= 80 ? "earth-like" as const : "rocky" as const,
+    starRadius: 1.0,
   };
 
   return (
@@ -39,20 +54,30 @@ const DiscoveryCard = ({
       className="glass-card hover:scale-[1.02] hover:shadow-lg hover:shadow-cyan-500/20 transition-all duration-300 cursor-pointer overflow-hidden animate-fade-in"
       style={{ animationDelay: `${delay}ms` }}
       onClick={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Mini Light Curve */}
-      <div className="h-20 bg-gradient-to-b from-white/5 to-transparent border-b border-white/10">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={lightCurveData}>
-            <Line
-              type="monotone"
-              dataKey="flux"
-              stroke="hsl(var(--cyan-glow))"
-              strokeWidth={1.5}
-              dot={false}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+      {/* Mini Light Curve or 3D View */}
+      <div className="h-20 bg-gradient-to-b from-white/5 to-transparent border-b border-white/10 relative">
+        {!isHovered ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={lightCurveData}>
+              <Line
+                type="monotone"
+                dataKey="flux"
+                stroke="hsl(var(--cyan-glow))"
+                strokeWidth={1.5}
+                dot={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="absolute inset-0">
+            <Suspense fallback={<Skeleton className="w-full h-full" />}>
+              <Exoplanet3DViewer data={exoplanetData} height={80} showControls={false} />
+            </Suspense>
+          </div>
+        )}
       </div>
 
       {/* Content */}

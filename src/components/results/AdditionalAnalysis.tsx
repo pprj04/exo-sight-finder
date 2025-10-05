@@ -1,3 +1,4 @@
+import { Suspense, lazy } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import {
@@ -12,6 +13,9 @@ import {
   Bar,
 } from "recharts";
 import { ExternalLink } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const Exoplanet3DViewer = lazy(() => import("@/components/Exoplanet3DViewer"));
 
 const phaseFoldedData = Array.from({ length: 100 }, (_, i) => ({
   phase: (i / 100) * 2 - 1,
@@ -52,12 +56,23 @@ const similarExoplanets = [
 ];
 
 const AdditionalAnalysis = () => {
+  // Mock data for 3D viewer
+  const exoplanetData = {
+    name: "KOI-7368",
+    orbitalPeriod: 23.5,
+    planetRadius: 1.8,
+    distance: 1.2,
+    type: "earth-like" as const,
+    starRadius: 1.1,
+  };
+
   return (
     <Tabs defaultValue="phase" className="w-full">
-      <TabsList className="grid w-full grid-cols-3 glass-card">
+      <TabsList className="grid w-full grid-cols-4 glass-card">
         <TabsTrigger value="phase">Phase-Folded</TabsTrigger>
         <TabsTrigger value="features">Feature Importance</TabsTrigger>
         <TabsTrigger value="similar">Similar Planets</TabsTrigger>
+        <TabsTrigger value="3d">3D View</TabsTrigger>
       </TabsList>
 
       <TabsContent value="phase" className="mt-4">
@@ -177,6 +192,22 @@ const AdditionalAnalysis = () => {
               </Card>
             ))}
           </div>
+        </Card>
+      </TabsContent>
+
+      <TabsContent value="3d" className="mt-4">
+        <Card className="glass-card p-6">
+          <h3 className="text-lg font-semibold mb-4">3D System Visualization</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Interactive 3D model of the exoplanet system
+          </p>
+          <Suspense fallback={
+            <div className="w-full h-[600px] flex items-center justify-center">
+              <Skeleton className="w-full h-full" />
+            </div>
+          }>
+            <Exoplanet3DViewer data={exoplanetData} height={600} showControls={true} />
+          </Suspense>
         </Card>
       </TabsContent>
     </Tabs>
